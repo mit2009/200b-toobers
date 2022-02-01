@@ -1,28 +1,31 @@
 /***************************************************
-DFPlayer - A Mini MP3 Player For Arduino
- <https://www.dfrobot.com/product-1121.html>
- 
- ***************************************************
- This example shows the basic function of library for DFPlayer.
- 
- Created 2016-12-07
- By [Angelo qiao](Angelo.qiao@dfrobot.com)
- 
- GNU Lesser General Public License.
- See <http://www.gnu.org/licenses/> for details.
- All above must be included in any redistribution
- ****************************************************/
 
-/***********Notice and Trouble shooting***************
- 1.Connection and Diagram can be found here
- <https://www.dfrobot.com/wiki/index.php/DFPlayer_Mini_SKU:DFR0299#Connection_Diagram>
- 2.This code is tested on Arduino Uno, Leonardo, Mega boards.
+ 2.00b Toobers! 
+ The 2022 Let's Play project - a simple simon-esque game.
+ Full Source and README can be found here: https://github.com/mit2009/200b-toobers
+ Hope you enjoy!
+ 
+ Questions: [Victor Hung](vhung@mit.edu)
+ Created for the 2022 MIT 2.00b Toy Product Design Class
+ MIT License
+ 
+ Parts adapted from the DFPlayer sample,
+ by [Angelo qiao](Angelo.qiao@dfrobot.com)
+ 
+ ----------------------------------------------------
+ 
+ This file is a work in progress.
+ Plenty more documentation coming soon! I promise!
+ - Victor
+ *skeptical "we'll see noises"*
+ - Everyone else
+ 
  ****************************************************/
 
 #include "SoftwareSerial.h"
 #include "DFRobotDFPlayerMini.h"
 
-SoftwareSerial mySoftwareSerial(10, 11); // RX, TX
+SoftwareSerial mySoftwareSerial(10, 11);    // RX, TX
 DFRobotDFPlayerMini myDFPlayer;
 void printDetail(uint8_t type, int value);
 
