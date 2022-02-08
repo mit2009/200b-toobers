@@ -67,13 +67,16 @@ void setup() {
   myDFPlayer.volume(20);                                   // Set volume value. From 0 to 30
   myDFPlayer.play(1);                                      // Play the first mp3! Exciting stuff
 
-  delay(120);                                              // This delay and digital write is timed to turn each light on and off
+  delay(240);                                              // This delay and digital write is timed to turn each light on and off
   for (int i = 2; i < 6; i ++) {                           // to match up with the sound effects
-    digitalWrite(i, HIGH);
-    delay(400);
-    digitalWrite(i, LOW);
+    for (int j = 0; j < (i == 5 ? 14 : 5); j ++) {
+      digitalWrite(i, HIGH);
+      delay(50);
+      digitalWrite(i, LOW);
+      delay(50);
+    }
   }
-  delay(8000);
+  delay(5000);
   state = 1;                                               // We're all set with this state. Let's set the state to 1 to start the sequence playing
 }
 
@@ -130,8 +133,8 @@ void loop()
           }
           delay(3000);
           myDFPlayer.play(score + 8);
-          delay(1000);
-          myDFPlayer.play(15);
+          delay(1500);
+          myDFPlayer.play(37);
           delay(3000);
         }
         
