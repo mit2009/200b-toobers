@@ -37,7 +37,7 @@ int playerSequenceIndex = 0;                              // When the user is pl
 
 /*
  * setup
- * 
+ * --
  * The setup() function is called when a sketch starts. Use it to initialize variables, pin modes, start using libraries, etc. 
  * This function will only run once, after each powerup or reset of the Arduino board.
  */
@@ -84,7 +84,7 @@ void setup() {
 
 /*
  * loop
- * 
+ * --
  * The loop function is called continously - meaning, once it reaches the end, it'll do exactly as 
  * the name suggests. Loop and call the function again! Note that if you have delays() in this function, it means
  * each loop will take longer.
@@ -176,7 +176,7 @@ void loop()
 
 /*
  * generate sequence
- * 
+ * --
  * helper function that generates a sequence of 100 random tones
  */
 void generateSequence() {
@@ -188,6 +188,14 @@ void generateSequence() {
   }
 }
 
+/*
+ * play score sound
+ * --
+ * helper function that plays the audio file of the player's score
+ * when the number gets larger than 19, the sounds are combined 
+ * e.g. a voice recording of 20 + a voice recording of 4
+ * when the number gets to 100, we play the final celebratory score
+ */
 void playScoreSound(int s) {
   if (s < 20) {
     myDFPlayer.play(s + 8);
