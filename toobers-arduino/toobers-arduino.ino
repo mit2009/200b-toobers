@@ -36,7 +36,8 @@ int buttonPressed[4] = {false, false, false, false};      // State of each butto
 int playerSequenceIndex = 0;                              // When the user is playing back the sequence, this keeps track of where in the sequence they are
 
 /*
- * SETUP:
+ * setup
+ * 
  * The setup() function is called when a sketch starts. Use it to initialize variables, pin modes, start using libraries, etc. 
  * This function will only run once, after each powerup or reset of the Arduino board.
  */
@@ -78,7 +79,8 @@ void setup() {
 }
 
 /*
- * LOOP:
+ * loop
+ * 
  * The loop function is called continously - meaning, once it reaches the end, it'll do exactly as 
  * the name suggests. Loop and call the function again! Note that if you have delays() in this function, it means
  * each loop will take longer.
@@ -156,18 +158,23 @@ void loop()
   }
 }
 
+/*
+ * generate sequence
+ * 
+ * helper function that generates a sequence of 100 random tones
+ */
 void generateSequence() {
   randomSeed(analogRead(0));                              // Nothing is connected to pin A0, which will produce noise. 
                                                           // We can use this noise to generate a random number.
     
   for (int i = 0; i < 100; i++) {                         // Pre-set 100 random tones to be our sequence
     int randomNumber = random(2, 6);
-    if (i > 0) {
-      if (randomNumber == sequence[i-1]) {
+    if (i > 0 && i < 10) {                                // For the first 10 notes of the game, we want each tone to be different.
+      while (randomNumber == sequence[i-1]) {             // This prevents the same tone from occuring more than two times in a row
         randomNumber = random(2, 6);
       }
     }
-    sequence[i] = random(2, 6);
+    sequence[i] = randomNumber;
   }
 }
 
