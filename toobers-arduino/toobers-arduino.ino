@@ -168,13 +168,7 @@ void generateSequence() {
                                                           // We can use this noise to generate a random number.
     
   for (int i = 0; i < 100; i++) {                         // Pre-set 100 random tones to be our sequence
-    int randomNumber = random(2, 6);
-    if (i > 0 && i < 10) {                                // For the first 10 notes of the game, we want each tone to be different.
-      while (randomNumber == sequence[i-1]) {             // This prevents the same tone from occuring more than two times in a row
-        randomNumber = random(2, 6);
-      }
-    }
-    sequence[i] = randomNumber;
+    sequence[i] = random(2, 6);
   }
 }
 
