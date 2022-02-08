@@ -20,8 +20,7 @@
 #include "DFRobotDFPlayerMini.h"
 
 SoftwareSerial mySoftwareSerial(10, 11);                  // RX, TX
-DFRobotDFPlayerMini myDFPlayer;                           // Create myDFPlayer of the DFPlayer Class
-void printDetail(uint8_t type, int value);              
+DFRobotDFPlayerMini myDFPlayer;                           // Create myDFPlayer of the DFPlayer Class             
 
 int state = 0;                                            // Create a variable to store the 'state' of the game
                                                           // - State 0: Game is playing starting sequence
@@ -143,18 +142,20 @@ void loop()
   }
 
   if (state == 3) {                                        // Waiting for player to press 
+    digitalWrite(2, HIGH);
     digitalWrite(3, HIGH);
-    if (digitalRead(7) == LOW) {
+    digitalWrite(4, HIGH);
+    digitalWrite(5, HIGH);
+    if (digitalRead(6) == LOW || digitalRead(7) == LOW || digitalRead(8) == LOW || digitalRead(9) == LOW) {
       playerSequenceIndex = 0;
       score = 0;
       state = 1;
+      digitalWrite(2, LOW);
       digitalWrite(3, LOW);
+      digitalWrite(4, LOW);
+      digitalWrite(5, LOW);
       delay(1000);
     }
-  }
-
-  if (myDFPlayer.available()) {
-    printDetail(myDFPlayer.readType(), myDFPlayer.read()); // Print the detail message from DFPlayer to handle different errors and states.
   }
 }
 
@@ -170,66 +171,4 @@ void generateSequence() {
   for (int i = 0; i < 100; i++) {                         // Pre-set 100 random tones to be our sequence
     sequence[i] = random(2, 6);
   }
-}
-
-void printDetail(uint8_t type, int value){
-  switch (type) {
-    case TimeOut:
-      Serial.println(F("Time Out!"));
-      break;
-    case WrongStack:
-      Serial.println(F("Stack Wrong!"));
-      break;
-    case DFPlayerCardInserted:
-      Serial.println(F("Card Inserted!"));
-      break;
-    case DFPlayerCardRemoved:
-      Serial.println(F("Card Removed!"));
-      break;
-    case DFPlayerCardOnline:
-      Serial.println(F("Card Online!"));
-      break;
-    case DFPlayerUSBInserted:
-      Serial.println("USB Inserted!");
-      break;
-    case DFPlayerUSBRemoved:
-      Serial.println("USB Removed!");
-      break;
-    case DFPlayerPlayFinished:
-      Serial.print(F("Number:"));
-      Serial.print(value);
-      Serial.println(F(" Play Finished!"));
-      break;
-    case DFPlayerError:
-      Serial.print(F("DFPlayerError:"));
-      switch (value) {
-        case Busy:
-          Serial.println(F("Card not found"));
-          break;
-        case Sleeping:
-          Serial.println(F("Sleeping"));
-          break;
-        case SerialWrongStack:
-          Serial.println(F("Get Wrong Stack"));
-          break;
-        case CheckSumNotMatch:
-          Serial.println(F("Check Sum Not Match"));
-          break;
-        case FileIndexOut:
-          Serial.println(F("File Index Out of Bound"));
-          break;
-        case FileMismatch:
-          Serial.println(F("Cannot Find File"));
-          break;
-        case Advertise:
-          Serial.println(F("In Advertise"));
-          break;
-        default:
-          break;
-      }
-      break;
-    default:
-      break;
-  }
-  
 }
