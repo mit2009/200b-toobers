@@ -20,8 +20,9 @@
 #include "DFRobotDFPlayerMini.h"
 
 SoftwareSerial mySoftwareSerial(10, 11);                  // RX, TX
-DFRobotDFPlayerMini myDFPlayer;                           // Create myDFPlayer of the DFPlayer Class             
-
+DFRobotDFPlayerMini myDFPlayer;                           // Create myDFPlayer of the DFPlayer Class
+             
+int MAX_SCORE = 100;
 int state = 0;                                            // Create a variable to store the 'state' of the game
                                                           // - State 0: Game is playing starting sequence
                                                           // - State 1: Playing the sequence 
@@ -29,7 +30,7 @@ int state = 0;                                            // Create a variable t
                                                           // - State 3: Game is over! Awaiting user to press green to continue
                                                         
 int score = 0;                                            // Keeps track of the score
-int sequence[100];                                        // Keeps track of the sequence
+int sequence[101];                                        // Keeps track of the sequence
 int buttonPressed[4] = {false, false, false, false};      // State of each button
 
 int playerSequenceIndex = 0;                              // When the user is playing back the sequence, this keeps track of where in the sequence they are
@@ -53,7 +54,7 @@ void setup() {
   }
 
   generateSequence();
-                        
+
   Serial.println(F("Starting 2.00b Simon!"));             // Print to serial monitor that we're starting!       
   
   if (!myDFPlayer.begin(mySoftwareSerial)) {              // Use softwareSerial to communicate with mp3. If we have trouble,
@@ -65,6 +66,7 @@ void setup() {
   }
   
   myDFPlayer.volume(20);                                   // Set volume value. From 0 to 30
+ 
   myDFPlayer.play(1);                                      // Play the first mp3! Exciting stuff
 
   delay(240);                                              // This delay and digital write is timed to turn each light on and off
@@ -90,6 +92,7 @@ void setup() {
 void loop()
 {
   if (state == 1) {                                        // This is where we'll play the sequence to the user
+    Serial.println(score);
     for (int i = 0; i < score + 1; i++) {                  // The number of tones played is one more than the score
       myDFPlayer.play(sequence[i]);                        // Play the tone as defined in our initial 100 tones.
       digitalWrite(sequence[i], HIGH);
@@ -117,10 +120,18 @@ void loop()
         if (sequence[playerSequenceIndex] == i) {
           playerSequenceIndex += 1;
           if (playerSequenceIndex > score) {               // That's all the buttons they need to play!
-             score += 1;                                   
+                                               
              myDFPlayer.play(6);
              delay(800);
-             state = 1;                                    // We've updated the state, and now we're returning to the toy playing the sequence
+             if (score < MAX_SCORE) {
+               score += 1;
+               state = 1;                                  // We've updated the state, and now we're returning to the toy playing the sequence
+             } else {
+               playScoreSound(MAX_SCORE);                  // Gasp! They've reached 100! That's the highest possible score!
+               myDFPlayer.play(37);
+               delay(3000);
+               state = 3;
+             }
           }                                                // to the player
         } else {
           state = 3;                                       // Player has lost! Update the state to now be in the 'waiting for reset'
@@ -132,10 +143,11 @@ void loop()
             digitalWrite(7-k, LOW);
           }
           delay(3000);
-          myDFPlayer.play(score + 8);
-          delay(1500);
+          
+          playScoreSound(score);
+          
           myDFPlayer.play(37);
-          delay(3000);
+          delay(2500);
         }
         
       } else if (digitalRead(i+4) == HIGH && buttonPressed[i-2] == true) {
@@ -171,7 +183,26 @@ void generateSequence() {
   randomSeed(analogRead(0));                              // Nothing is connected to pin A0, which will produce noise. 
                                                           // We can use this noise to generate a random number.
     
-  for (int i = 0; i < 100; i++) {                         // Pre-set 100 random tones to be our sequence
+  for (int i = 0; i < MAX_SCORE + 1; i++) {               // Pre-set 100 random tones to be our sequence
     sequence[i] = random(2, 6);
+  }
+}
+
+void playScoreSound(int s) {
+  if (s < 20) {
+    myDFPlayer.play(s + 8);
+    delay(1500);
+  } else if (s < 100) {
+    int tens = s / 10;
+    int ones = s % 10;
+    myDFPlayer.play(tens + 26);
+    delay(800);
+    if (ones != 0) {
+      myDFPlayer.play(ones + 8);
+      delay(1500);
+    }
+  } else if (s == MAX_SCORE) {
+    myDFPlayer.play(36);
+    delay(10000);
   }
 }
