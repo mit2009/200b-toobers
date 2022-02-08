@@ -1,6 +1,7 @@
 /***************************************************
 
  2.00b Toobers! 
+ 
  The 2022 Let's Play project - a simple simon-esque game.
  Full Source and README can be found here: https://github.com/mit2009/200b-toobers
  Hope you enjoy!
@@ -25,30 +26,37 @@
 #include "SoftwareSerial.h"
 #include "DFRobotDFPlayerMini.h"
 
-SoftwareSerial mySoftwareSerial(10, 11);    // RX, TX
-DFRobotDFPlayerMini myDFPlayer;
-void printDetail(uint8_t type, int value);
+SoftwareSerial mySoftwareSerial(10, 11);                // RX, TX
+DFRobotDFPlayerMini myDFPlayer;                         // Create myDFPlayer of the DFPlayer Class
+void printDetail(uint8_t type, int value);              
 
-int state = 0;
-int score = 0;
-int sequence[100];
-int buttonPressed[4] = {false, false, false, false};
+int state = 0;                                          // Create a variable to store the 'state' of the game
+                                                        // - State 0: Game is playing starting sequence
+                                                        // - State 1: Playing the sequence 
+                                                        // - State 2: Waiting user input response
+                                                        // - State 3: Game is over! Awaiting user to press green to continue
+                                                        
+int score = 0;                                          // Keeps track of the score
+int sequence[100];                                      // Keeps track of the sequence
+int buttonPressed[4] = {false, false, false, false};    // State of each button
 
-int playerSequenceIndex = 0;
+int playerSequenceIndex = 0;                            // When the user is playing back the sequence, this keeps track of where in the sequence they are
 
 void setup() {
   mySoftwareSerial.begin(9600);
   Serial.begin(115200);
 
-  for (int i = 2; i < 6; i++) {
+  for (int i = 2; i < 6; i++) {                         // Set inputs 2, 3, 4, 5 to be OUTPUT pins (LEDs)           
     pinMode(i, OUTPUT);
   }
   
-  for (int i = 6; i < 10; i++) {
+  for (int i = 6; i < 10; i++) {                        // Set inputs 6, 7, 8, 9 to be INPUT pins (Buttons)
     pinMode(i, INPUT_PULLUP);
   }
 
-  randomSeed(analogRead(0));
+  randomSeed(analogRead(0));                            // Nothing is connected to pin A0, which will produce noise. 
+                                                        // We can use this noise to generate a random number.
+    
   for (int i = 0; i < 100; i++) {
     int randomNumber = random(2, 6);
     if (i > 0) {
@@ -62,7 +70,7 @@ void setup() {
   Serial.println();
   Serial.println(F("Starting 2.00b Simon!"));
   
-  if (!myDFPlayer.begin(mySoftwareSerial)) {  //Use softwareSerial to communicate with mp3.
+  if (!myDFPlayer.begin(mySoftwareSerial)) {              // Use softwareSerial to communicate with mp3.
     Serial.println(F("Unable to begin:"));
     Serial.println(F("1.Please recheck the connection!"));
     Serial.println(F("2.Please insert the SD card!"));
