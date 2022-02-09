@@ -13,5 +13,6 @@ do
    cp ../mp3/00$i.mp3 /Volumes/Untitled/1 &&
    echo "Copied 00$i.mp3"
 done
+dot_clean /Volumes/Untitled/1
 echo "done!\n"
 done

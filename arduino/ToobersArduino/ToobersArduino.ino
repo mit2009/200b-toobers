@@ -21,7 +21,7 @@
 
 SoftwareSerial mySoftwareSerial(10, 11);                  // RX, TX
 DFRobotDFPlayerMini myDFPlayer;                           // Create myDFPlayer of the DFPlayer Class
-             
+
 int MAX_SCORE = 100;
 int state = 0;                                            // Create a variable to store the 'state' of the game
                                                           // - State 0: Game is playing starting sequence
@@ -57,6 +57,8 @@ void setup() {
 
   Serial.println(F("Starting 2.00b Simon!"));             // Print to serial monitor that we're starting!       
   
+  delay(1000);
+  
   if (!myDFPlayer.begin(mySoftwareSerial)) {              // Use softwareSerial to communicate with mp3. If we have trouble,
     Serial.println(F("Unable to begin:"));                // print to the serial monitor so we can see.
     Serial.println(F("1.Please recheck the connection!"));
@@ -64,10 +66,12 @@ void setup() {
   } else {
     Serial.println(F("DFPlayer Mini online."));          
   }
+
+  delay(1000);
   
-  myDFPlayer.volume(10);                                   // Set volume value. From 0 to 30
+  myDFPlayer.volume(20);                                   // Set volume value. From 0 to 30
  
-  myDFPlayer.play(1);                                      // Play the first mp3! Exciting stuff
+  playAudio(1);                                      // Play the first mp3! Exciting stuff
 
   delay(240);                                              // This delay and digital write is timed to turn each light on and off
   for (int i = 2; i < 6; i ++) {                           // to match up with the sound effects
@@ -94,7 +98,7 @@ void loop()
   if (state == 1) {                                        // This is where we'll play the sequence to the user
     Serial.println(score);
     for (int i = 0; i < score + 1; i++) {                  // The number of tones played is one more than the score
-      myDFPlayer.play(sequence[i]);                        // Play the tone as defined in our initial 100 tones.
+      playAudio(sequence[i]);                        // Play the tone as defined in our initial 100 tones.
       digitalWrite(sequence[i], HIGH);
       delay(400);
       digitalWrite(sequence[i], LOW);
@@ -112,7 +116,7 @@ void loop()
                                                            // Once the user presses it, this code will no longer run until they've fully 
                                                            // 'released' the button (see the else if statement below)
                                                            
-        myDFPlayer.play(i);                                // Play the message corresponding to 
+        playAudio(i);                                // Play the message corresponding to 
         digitalWrite(i, HIGH);
         delay(450);
         digitalWrite(i, LOW);
@@ -121,21 +125,21 @@ void loop()
           playerSequenceIndex += 1;
           if (playerSequenceIndex > score) {               // That's all the buttons they need to play!
                                                
-             myDFPlayer.play(6);
+             playAudio(6);
              delay(800);
              if (score < MAX_SCORE) {
                score += 1;
                state = 1;                                  // We've updated the state, and now we're returning to the toy playing the sequence
              } else {
                playScoreSound(MAX_SCORE);                  // Gasp! They've reached 100! That's the highest possible score!
-               myDFPlayer.play(37);
+               playAudio(37);
                delay(3000);
                state = 3;
              }
           }                                                // to the player
         } else {
           state = 3;                                       // Player has lost! Update the state to now be in the 'waiting for reset'
-          myDFPlayer.play(7); 
+          playAudio(7); 
           delay(200);
           for (int k = 2; k < 6; k ++) {
             digitalWrite(7-k, HIGH);
@@ -146,7 +150,7 @@ void loop()
           
           playScoreSound(score);
           
-          myDFPlayer.play(37);
+          playAudio(37);
           delay(2500);
         }
         
@@ -198,19 +202,23 @@ void generateSequence() {
  */
 void playScoreSound(int s) {
   if (s < 20) {
-    myDFPlayer.play(s + 8);
+    playAudio(s + 8);
     delay(1500);
   } else if (s < 100) {
     int tens = s / 10;
     int ones = s % 10;
-    myDFPlayer.play(tens + 26);
+    playAudio(tens + 26);
     delay(800);
     if (ones != 0) {
-      myDFPlayer.play(ones + 8);
+      playAudio(ones + 8);
       delay(1500);
     }
   } else if (s == MAX_SCORE) {
-    myDFPlayer.play(36);
+    playAudio(36);
     delay(10000);
   }
+}
+
+void playAudio(int s) {
+  myDFPlayer.play(s);
 }
