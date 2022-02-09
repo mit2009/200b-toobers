@@ -14,10 +14,10 @@
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-  // initialize pin 6 as an input.
-  pinMode(6, INPUT_PULLUP);
-  // initialize pin 2 as an output.
+  // initialize pin 2 as an output (the Red LED).
   pinMode(2, OUTPUT);
+  // initialize pin 6 as an input (the Red Button).
+  pinMode(6, INPUT_PULLUP);
 }
 
 // the loop function runs over and over again forever
