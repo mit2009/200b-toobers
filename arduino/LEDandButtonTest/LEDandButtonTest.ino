@@ -23,9 +23,9 @@ void setup() {
 // the loop function runs over and over again forever
 void loop() {
   if (digitalRead(6) == LOW) {          
-    digitalWrite(2, HIGH);              // Write HIGH (5v) to pin 3 (the LED!)
+    digitalWrite(2, HIGH);              // Write HIGH (5v) to pin 2 (the LED!)
     delay(100);                         // Delay for 100 milliseconds
-    digitalWrite(2, LOW);               // Write LOW (0v) to pin 3
+    digitalWrite(2, LOW);               // Write LOW (0v) to pin 2
     delay(100);                         // Delay
     digitalWrite(2, HIGH);              // ... and repeat!
     delay(100);
