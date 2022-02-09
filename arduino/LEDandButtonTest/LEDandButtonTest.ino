@@ -14,9 +14,9 @@
 
 // the setup function runs once when you press reset or power the board
 void setup() {
-  // initialize pin 2 as an input.
+  // initialize pin 6 as an input.
   pinMode(6, INPUT_PULLUP);
-  // initialize pin 3 as an output.
+  // initialize pin 2 as an output.
   pinMode(2, OUTPUT);
 }
 
