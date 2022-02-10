@@ -71,12 +71,12 @@ void setup() {
   
   myDFPlayer.volume(20);                                   // Set volume value. From 0 to 30
  
-  playAudio(1);                                      // Play the first mp3! Exciting stuff
+  playAudio(1);                                            // Play the first mp3! Exciting stuff
 
   delay(240);                                              // This delay and digital write is timed to turn each light on and off
   for (int i = 2; i < 6; i ++) {                           // to match up with the sound effects
-    for (int j = 0; j < (i == 5 ? 14 : 5); j ++) {
-      digitalWrite(i, HIGH);
+    for (int j = 0; j < (i == 5 ? 14 : 5); j ++) {         // There's an operation in there called the ternary operator.
+      digitalWrite(i, HIGH);                               // If we're on the last LED (i.e. led 5) loop more times so we can time it with the music
       delay(50);
       digitalWrite(i, LOW);
       delay(50);
@@ -98,7 +98,7 @@ void loop()
   if (state == 1) {                                        // This is where we'll play the sequence to the user
     Serial.println(score);
     for (int i = 0; i < score + 1; i++) {                  // The number of tones played is one more than the score
-      playAudio(sequence[i]);                        // Play the tone as defined in our initial 100 tones.
+      playAudio(sequence[i]);                              // Play the tone as defined in our initial 100 tones.
       digitalWrite(sequence[i], HIGH);
       delay(400);
       digitalWrite(sequence[i], LOW);
@@ -116,7 +116,7 @@ void loop()
                                                            // Once the user presses it, this code will no longer run until they've fully 
                                                            // 'released' the button (see the else if statement below)
                                                            
-        playAudio(i);                                // Play the message corresponding to 
+        playAudio(i);                                      
         digitalWrite(i, HIGH);
         delay(450);
         digitalWrite(i, LOW);
@@ -136,7 +136,7 @@ void loop()
                delay(3000);
                state = 3;
              }
-          }                                                // to the player
+          }                                                
         } else {
           state = 3;                                       // Player has lost! Update the state to now be in the 'waiting for reset'
           playAudio(7); 
