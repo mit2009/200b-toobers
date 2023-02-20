@@ -43,11 +43,11 @@ void loop() {
 }
 
 void setLed(int ledId, int r, int g, int b) {
-	leds[ledId] = CRGB(r, g, b);
+  leds[ledId] = CRGB(r, g, b);
   FastLED.show();
 }
 
 void clearLed(int ledId) {
-	leds[ledId] = CRGB(0, 0, 0);
+  leds[ledId] = CRGB(0, 0, 0);
   FastLED.show();
 }
