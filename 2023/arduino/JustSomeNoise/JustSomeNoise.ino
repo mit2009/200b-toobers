@@ -2,9 +2,9 @@
 
  2.00b Toobers! 
  
- The 2023 Let's Play project - a simple simon-esque game.
- Full Source and README can be found here: https://github.com/mit2009/200b-toobers
- Hope you enjoy!
+ JustSomeNoise.ino
+
+ A quick test to make sure the DFPlayer is working
  
  Created for the 2023 MIT 2.00b Toy Product Design Class
  Questions?: hit us up on #ask-the-tas on Slack
@@ -21,7 +21,6 @@
 
 SoftwareSerial mySoftwareSerial(3, 2);                    // Recieve Pin (RX), Transmit Pin (TX)
 DFRobotDFPlayerMini myDFPlayer;                           // Create myDFPlayer of the DFPlayer Class
-              // When the user is playing back the sequence, this keeps track of where in the sequence they are
 
 /*
  * setup
@@ -33,7 +32,6 @@ void setup() {
   
   mySoftwareSerial.begin(9600);                           // Initiate communication with the DFPlayer
   Serial.begin(115200);                                   // Mostly used for debugging
-
   Serial.println(F("Starting 2.00b Simon!"));             // Print to serial monitor that we're starting!       
   
   delay(1000);
@@ -45,14 +43,12 @@ void setup() {
   } else {
     Serial.println(F("DFPlayer Mini online."));          
   }
-
   
-  myDFPlayer.volume(20);                                   // Set volume value. From 0 to 30
-  playAudio(1);                                            // Play the first mp3! Exciting stuff
+  myDFPlayer.volume(20);                                  // Set volume value. From 0 to 30
+  playAudio(1);                                           // Play the first mp3! Exciting stuff
 }
 
-void loop() {
-
+void loop() {                                             // Empty for this test, as we aren't taking in any feedback
 }
 
 void playAudio(int s) {
