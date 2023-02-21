@@ -62,11 +62,7 @@ void setup() {
   mySoftwareSerial.begin(9600);                           // Initiate communication with the DFPlayer
   Serial.begin(115200);                                   // Mostly used for debugging
 
-  // for (int i = 2; i < 6; i++) {                           // Set inputs 2, 3, 4, 5 to be OUTPUT pins (LEDs)           
-  //   pinMode(i, OUTPUT);
-  // }
-  
-  for (int i = 5; i < 9; i++) {                          // Set inputs 5, 6, 7, 8 to be INPUT pins (Buttons)
+  for (int i = 5; i < 9; i++) {                           // Set inputs 5, 6, 7, 8 to be INPUT pins (Buttons)
     pinMode(i, INPUT_PULLUP);
   }
 
@@ -86,8 +82,7 @@ void setup() {
 
   delay(1000);
   
-  myDFPlayer.volume(25);                                   // Set volume value. From 0 to 30
- 
+  myDFPlayer.volume(20);                                   // Set volume value. From 0 to 30
   playAudio(1);                                            // Play the first mp3! Exciting stuff
 
   delay(240);                                              // This delay and digital write is timed to turn each light on and off
@@ -100,25 +95,18 @@ void setup() {
     }
   }
 
-  for (int hue = 0; hue < 400; hue ++) {
+  for (int hue = 0; hue < 400; hue ++) {                   // Play a fun rainbow while we wait for the intro music to finish
     for(int i = 0; i < 4; i++) {
-      // Set the i'th led to red 
       leds[i] = CHSV((hue * 4 + i * 20) % 255, 255, 255);
-      // Show the leds
       FastLED.show(); 
-      // now that we've shown the leds, reset the i'th led to black
-      // leds[i] = CRGB::Black;
-      // fadeall();
-      // Wait a little bit before we loop around and do it again
     }
     delay(10);
   }
-  clearLed(0);
-  clearLed(1);
-  clearLed(2);
-  clearLed(3);
 
-  // delay(5000);
+  for (int i = 0; i < 4; i ++) {                           // Turn the LEDs off before starting
+    clearLed(i);
+  }
+
   state = 1;                                               // We're all set with this state. Let's set the state to 1 to start the sequence playing
 }
 
@@ -140,7 +128,7 @@ void loop()
   if (state == 1) {                                        // This is where we'll play the sequence to the user
     Serial.println(score);
     for (int i = 0; i < score + 1; i++) {                  // The number of tones played is one more than the score
-      playAudio(sequence[i]+2);                              // Play the tone as defined in our initial 100 tones.
+      playAudio(sequence[i]+2);                            // Play the tone as defined in our initial 100 tones.
       setLedSimple(sequence[i]);
       delay(400);
       clearLed(sequence[i]);
@@ -153,7 +141,7 @@ void loop()
   if (state == 2) {                                        // If we're in this state, we're listening to the user input          
     for (int i = 0; i < 4; i ++) {
       if (readButton(i) == LOW && buttonPressed[i] == false) {
-        buttonPressed[i] = true;                          // This line is used for debouncing. We can use this technique to prevent
+        buttonPressed[i] = true;                           // This line is used for debouncing. We can use this technique to prevent
                                                            // a button from being pressed 'multiple times', since the input may be noisy.
                                                            // Once the user presses it, this code will no longer run until they've fully 
                                                            // 'released' the button (see the else if statement below)
@@ -197,26 +185,23 @@ void loop()
         }
         
       } else if (readButton(i) == HIGH && buttonPressed[i] == true) {
-        buttonPressed[i] = false;                        // Part of the debouncing system as mentioned above
+        buttonPressed[i] = false;                          // Part of the debouncing system as mentioned above
       }
     }
   }
 
   if (state == 3) {                                        // Waiting for player to press 
-
-    setLedSimple(0);
-    setLedSimple(1);
-    setLedSimple(2);
-    setLedSimple(3);
+    for (int i = 0; i < 4; i ++) {                         // Turn the LEDs on to their colors
+      setLedSimple(i);
+    }
 
     if (readButton(0) == LOW || readButton(1) == LOW || readButton(2) == LOW || readButton(3) == LOW) {
       playerSequenceIndex = 0;
       score = 0;
       state = 1;
-      clearLed(0);
-      clearLed(1);
-      clearLed(2);
-      clearLed(3);
+      for (int i = 0; i < 4; i ++) {                       // Turn the LEDs off before starting
+        clearLed(i);
+      }
       delay(1000);
     }
   }
