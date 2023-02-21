@@ -29,8 +29,8 @@ void setup()
 {
   FastLED.addLeds<WS2812, LED_PIN, RGB>(leds, NUM_LEDS); // Tell FastLED about what type of LEDs we have, how many we have, and where they are
   FastLED.setBrightness(255);                            // Tell FastLED we will be providing brightness values from 0 - 255 inclusive
-  pinMode(8, INPUT_PULLUP);                              // initialize pin 8 as an input (the Red Button)
                                                          // Note that 255 is equivalent to 2^8 - 1, or the amount of information you can store in a byte
+  pinMode(8, INPUT_PULLUP);                              // initialize pin 8 as an input (the Red Button)
 }
 
 /**
@@ -51,6 +51,7 @@ void loop()
     clearLed(0);            // Clear out the values written to the first LED
   }
 }
+
 /**
  * setLed
  * @param ledId the address of the LED you want to set
